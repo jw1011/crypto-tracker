@@ -93,7 +93,7 @@ function Coins() {
               <Link
                 to={{
                   pathname: `/${coin.id}`,
-                  state: { name: coin.name },
+                  state: { name: coin.name, symbol: coin.symbol.toLowerCase() },
                 }}
               >
                 <Img
