@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import { fetchCoinHistory } from "../api";
-import ApexChart from "react-apexcharts";
+import ApexCharts from "react-apexcharts";
 
 interface IHistorical {
   time_open: string;
@@ -20,22 +20,22 @@ interface ChartProps {
 function Chart({ coinId }: ChartProps) {
   const { isLoading, data } = useQuery<IHistorical[]>(
     ["ohlcv", coinId],
-    () => fetchCoinHistory(coinId)
-    // {
-    //   refetchInterval: 10000,
-    // }
+    () => fetchCoinHistory(coinId),
+    {
+      refetchInterval: 10000,
+    }
   );
   return (
     <div>
       {isLoading ? (
-        "Loading chart..."
+        "Loading Chart..."
       ) : (
-        <ApexChart
+        <ApexCharts
           type="line"
           series={[
             {
-              name: "Price",
-              data: data?.map((price) => Number(price.close)) as number[],
+              name: "price",
+              data: data?.map((price) => price.close) as number[],
             },
           ]}
           options={{
@@ -43,11 +43,9 @@ function Chart({ coinId }: ChartProps) {
               mode: "dark",
             },
             chart: {
-              height: 400,
-              width: 700,
-              toolbar: {
-                show: false,
-              },
+              height: 500,
+              width: 500,
+              toolbar: { show: false },
               background: "transparent",
             },
             grid: { show: false },
@@ -55,13 +53,21 @@ function Chart({ coinId }: ChartProps) {
               curve: "smooth",
               width: 4,
             },
-            yaxis: { show: false },
+            yaxis: {
+              show: false,
+            },
             xaxis: {
-              axisBorder: { show: false },
-              axisTicks: { show: false },
-              labels: { show: false },
+              labels: {
+                show: false,
+              },
+              axisBorder: {
+                show: false,
+              },
+              axisTicks: {
+                show: false,
+              },
               type: "datetime",
-              categories: data?.map((price) => Number(price.time_close)),
+              categories: data?.map((price) => price.time_close),
             },
             fill: {
               type: "gradient",
@@ -70,7 +76,7 @@ function Chart({ coinId }: ChartProps) {
             colors: ["#0fbcf9"],
             tooltip: {
               y: {
-                formatter: (value) => `$${value.toFixed(2)}`,
+                formatter: (value) => `$ ${value.toFixed(3)}`,
               },
             },
           }}
