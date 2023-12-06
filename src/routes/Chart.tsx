@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import { fetchCoinHistory } from "../api";
-import ApexCharts from "react-apexcharts";
+import ApexChart from "react-apexcharts";
 import { useRecoilValue } from "recoil";
 import { isDarkAtom } from "../atoms";
 
@@ -31,14 +31,14 @@ function Chart({ coinId }: ChartProps) {
   return (
     <div>
       {isLoading ? (
-        "Loading Chart..."
+        "Loading chart..."
       ) : (
-        <ApexCharts
+        <ApexChart
           type="line"
           series={[
             {
-              name: "price",
-              data: data?.map((price) => price.close) as number[],
+              name: "Price",
+              data: data?.map((price) => price.close) ?? [],
             },
           ]}
           options={{
@@ -46,9 +46,11 @@ function Chart({ coinId }: ChartProps) {
               mode: isDark ? "dark" : "light",
             },
             chart: {
-              height: 500,
+              height: 300,
               width: 500,
-              toolbar: { show: false },
+              toolbar: {
+                show: false,
+              },
               background: "transparent",
             },
             grid: { show: false },
@@ -60,15 +62,9 @@ function Chart({ coinId }: ChartProps) {
               show: false,
             },
             xaxis: {
-              labels: {
-                show: false,
-              },
-              axisBorder: {
-                show: false,
-              },
-              axisTicks: {
-                show: false,
-              },
+              axisBorder: { show: false },
+              axisTicks: { show: false },
+              labels: { show: false },
               type: "datetime",
               categories: data?.map((price) => price.time_close),
             },
@@ -79,7 +75,7 @@ function Chart({ coinId }: ChartProps) {
             colors: ["#0fbcf9"],
             tooltip: {
               y: {
-                formatter: (value) => `$ ${value.toFixed(3)}`,
+                formatter: (value) => `$${value.toFixed(2)}`,
               },
             },
           }}
@@ -88,5 +84,4 @@ function Chart({ coinId }: ChartProps) {
     </div>
   );
 }
-
 export default Chart;
